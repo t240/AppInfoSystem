@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.appsys.dao.app.AppMapper">
+     <!-- 查询所有App状态 -->
+     <select id="getDataList" resultType="DataDictionary">
+         SELECT * FROM data_dictionary  WHERE typeCode = #{typeCode}
+     </select>
+     <!-- 三级分类 -->
+     <select id="getclassfiy" resultType="AppCategory">
+         SELECT * FROM app_category WHERE 
+         <choose>
+            <when test="parentId != null">parentId = #{parentId}</when>
+            <otherwise>parentId IS NULL</otherwise>
+         </choose>
+     </select>
+     <!-- app信息查询 -->
+     <select id="getappinfo" resultType="AppInfo">
+          SELECT a.id, a.softwareName,a.APKName,a.supportROM,a.softwareSize,a.devId,
+         (SELECT devName FROM dev_user WHERE id = a.devId) as devName,a.status,
+         (SELECT valueName FROM data_dictionary d WHERE  a.status=d.valueId AND d.typeCode='APP_STATUS') as statusName,a.flatformId,
+         (SELECT valueName FROM data_dictionary d WHERE  a.flatformId=d.valueId AND d.typeCode='APP_FLATFORM') as flatformName,a.categoryLevel1,
+         (SELECT categoryName FROM app_category c WHERE  c.id=a.categoryLevel1) as categoryLevel1Name,a.categoryLevel2,
+         (SELECT categoryName FROM app_category c WHERE  c.id=a.categoryLevel2) as categoryLevel2Name,a.categoryLevel3,
+         (SELECT categoryName FROM app_category c WHERE  c.id=a.categoryLevel3) as categoryLevel3Name,a.downloads,a.onSaleDate,a.versionId,
+         (SELECT v.versionNo FROM app_version v where v.id=a.versionId ) as versionNo
+         FROM  app_info a
+          <trim prefix="WHERE" prefixOverrides="AND">
+              <if test="softwareName != null">AND softwareName LIKE CONCAT('%',#{softwareName},'%')</if>
+              <if test="status != null">AND `status` = #{status}</if>
+              <if test="flatformId != null">AND flatformId = #{flatformId}</if>
+              <if test="categoryLevel1 != null">AND categoryLevel1 = #{categoryLevel1}</if>
+              <if test="categoryLevel2 != null">AND categoryLevel2 = #{categoryLevel2}</if>
+              <if test="categoryLevel3 != null">AND categoryLevel3 = #{categoryLevel3}</if>
+          </trim>
+          LIMIT #{currentPageNo},#{showPageCount}
+     </select>
+     <!-- 查询出总记录数 -->
+     <select id="getcount" resultType="Integer">
+         SELECT COUNT(1) FROM app_info
+          <trim prefix="WHERE" prefixOverrides="AND">
+              <if test="softwareName != null">AND softwareName LIKE CONCAT('%',#{softwareName},'%')</if>
+              <if test="status != null">AND `status` = #{status}</if>
+              <if test="flatformId != null">AND flatformId = #{flatformId}</if>
+              <if test="categoryLevel1 != null">AND categoryLevel1 = #{categoryLevel1}</if>
+              <if test="categoryLevel2 != null">AND categoryLevel2 = #{categoryLevel2}</if>
+              <if test="categoryLevel3 != null">AND categoryLevel3 = #{categoryLevel3}</if>
+          </trim>
+     </select>
+</mapper>
