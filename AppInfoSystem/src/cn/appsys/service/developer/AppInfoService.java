@@ -10,7 +10,7 @@ import cn.appsys.pojo.DataDictionary;
  * @author DELL
  *
  */
-public interface AppService {
+public interface AppInfoService {
 	//查询App状态
 	public List<DataDictionary> getDataList(String typeCode);
 	//三级分类查询

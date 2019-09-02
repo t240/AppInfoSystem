@@ -5,28 +5,28 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.appsys.dao.app.AppMapper;
+import cn.appsys.dao.app.AppInfoMapper;
 import cn.appsys.pojo.AppCategory;
 import cn.appsys.pojo.AppInfo;
 import cn.appsys.pojo.DataDictionary;
-import cn.appsys.service.developer.AppService;
+import cn.appsys.service.developer.AppInfoService;
 import cn.appsys.tools.IsexectisNull;
 /**
  * App业务实现类
  * @author DELL
  *
  */
-@Service("appService")
-public class AppServiceImpl implements AppService {
+@Service("appInfoService")
+public class AppInfoServiceImpl implements AppInfoService {
 
 	@Autowired
-	private AppMapper appMapper;
+	private AppInfoMapper appInfoMapper;
 	/**
 	 * 查询所有App状态
 	 */
 	@Override
 	public List<DataDictionary> getDataList(String typeCode) {
-		List<DataDictionary> dataList = appMapper.getDataList(typeCode);
+		List<DataDictionary> dataList = appInfoMapper.getDataList(typeCode);
 		if(IsexectisNull.isBlank(typeCode)) {
 			for (int i = 0; i < dataList.size(); i++) {
 				DataDictionary data = dataList.get(i);
@@ -43,7 +43,7 @@ public class AppServiceImpl implements AppService {
 	 */
 	@Override
 	public List<AppCategory> getclassfiy(String categoryLevel) {
-		return appMapper.getclassfiy(categoryLevel);
+		return appInfoMapper.getclassfiy(categoryLevel);
 	}
 	/**
 	 *查询app信息
@@ -59,7 +59,7 @@ public class AppServiceImpl implements AppService {
 			} else {
 				pageIndex = currentPageNo -1;
 			}
-			infoList = appMapper.getappinfo(info.getSoftwareName(),info.getStatus(),info.getFlatformId(),info.getCategoryLevel1()
+			infoList = appInfoMapper.getappinfo(info.getSoftwareName(),info.getStatus(),info.getFlatformId(),info.getCategoryLevel1()
 					                        ,info.getCategoryLevel2(),info.getCategoryLevel3(),pageIndex,showPageCount);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,7 +71,7 @@ public class AppServiceImpl implements AppService {
 	 */
 	@Override
 	public int getcount(AppInfo info) {
-		return appMapper.getcount(info);
+		return appInfoMapper.getcount(info);
 	}
 	/**
 	 * 判断APK名称唯一
@@ -79,7 +79,7 @@ public class AppServiceImpl implements AppService {
 	@Override
 	public boolean getAppInfoByAPK(String APKName) {
 		boolean flag = false;
-		if(appMapper.getAppInfoByAPK(APKName) != null) {
+		if(appInfoMapper.getAppInfoByAPK(APKName) != null) {
 			flag = true;
 		}
 		return flag;
@@ -90,7 +90,7 @@ public class AppServiceImpl implements AppService {
 	@Override
 	public boolean addAppInfo(AppInfo info) {
 		boolean flag = false;
-		if(appMapper.addAppInfo(info) == 1) {
+		if(appInfoMapper.addAppInfo(info) == 1) {
 			flag = true;
 		}
 		return flag;
@@ -101,7 +101,7 @@ public class AppServiceImpl implements AppService {
 	@Override
 	public boolean modifyAppInfosave(AppInfo info) {
 		boolean flag = false;
-		if(appMapper.modifyAppInfosave(info) == 1) {
+		if(appInfoMapper.modifyAppInfosave(info) == 1) {
 			flag = true;
 		}
 		return flag;
@@ -111,7 +111,7 @@ public class AppServiceImpl implements AppService {
 	 */
 	@Override
 	public AppInfo modifyAppInfo(Integer id) {
-		return appMapper.modifyAppInfo(id);
+		return appInfoMapper.modifyAppInfo(id);
 	}
 
 }

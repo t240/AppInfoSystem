@@ -13,7 +13,7 @@ import cn.appsys.pojo.DataDictionary;
  * @author DELL
  *
  */
-public interface AppMapper {
+public interface AppInfoMapper {
 	//下拉列表查询
 	public List<DataDictionary> getDataList(@Param("typeCode")String typeCode);
     //三级分类查询

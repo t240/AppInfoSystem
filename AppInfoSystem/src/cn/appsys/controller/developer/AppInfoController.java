@@ -25,8 +25,8 @@ import cn.appsys.pojo.AppInfo;
 import cn.appsys.pojo.DataDictionary;
 import cn.appsys.pojo.DevUser;
 import cn.appsys.pojo.pages;
-import cn.appsys.service.developer.AppService;
 import cn.appsys.tools.IsexectisNull;
+import cn.appsys.service.developer.AppInfoService;
 
 /**
  * App信息控制器
@@ -39,7 +39,7 @@ public class AppInfoController {
 
 	private Logger logger = Logger.getLogger(AppInfoController.class);
 	@Autowired
-	private AppService appservice;
+	private AppInfoService appInfoService;
 	
 	/**
 	 * 打开APP信息管理维护
@@ -66,13 +66,13 @@ public class AppInfoController {
 		if(IsexectisNull.isBlank(pageIndex)) {
 			pagecurrNo = Integer.parseInt(pageIndex);
 		}
-		model.addAttribute("statusList", appservice.getDataList("APP_STATUS"));    //APP状态下拉列表
-		model.addAttribute("flatFormList", appservice.getDataList("APP_FLATFORM"));  //所属平台下拉列表
-		model.addAttribute("categoryLevel1List", appservice.getclassfiy(null));  //一级分类
+		model.addAttribute("statusList", appInfoService.getDataList("APP_STATUS"));    //APP状态下拉列表
+		model.addAttribute("flatFormList", appInfoService.getDataList("APP_FLATFORM"));  //所属平台下拉列表
+		model.addAttribute("categoryLevel1List", appInfoService.getclassfiy(null));  //一级分类
 		//分页类
 		pages page = new pages();
 		page.setShowPageCount(5);
-		page.setTotalCount(appservice.getcount(info));
+		page.setTotalCount(appInfoService.getcount(info));
 		//控制分页首尾
 		if(pagecurrNo < 0) {
 			pagecurrNo = 1;
@@ -82,7 +82,7 @@ public class AppInfoController {
 		page.setCurrentPageNo(pagecurrNo);
 		model.addAttribute("pages", page);
 		logger.debug(page.getCurrentPageNo()+"=============="+page.getShowPageCount());
-		model.addAttribute("appInfoList", appservice.getappinfo(info,page.getCurrentPageNo(),page.getShowPageCount()));
+		model.addAttribute("appInfoList", appInfoService.getappinfo(info,page.getCurrentPageNo(),page.getShowPageCount()));
 		return "developer/appinfolist"; 
 	}
 	
@@ -97,7 +97,7 @@ public class AppInfoController {
 		if("".equals(pid)) {
 			pid = null;
 		}
-		return appservice.getclassfiy(pid);
+		return appInfoService.getclassfiy(pid);
 	}
 	/**
 	 * 打开APP信息添加页面
@@ -115,7 +115,7 @@ public class AppInfoController {
 	@RequestMapping(value="/datadictionarylist.json",method=RequestMethod.GET)
 	@ResponseBody
 	public List<DataDictionary> loaddatadictionarylist(String tcode){
-		return appservice.getDataList(tcode);
+		return appInfoService.getDataList(tcode);
 	}
 	@RequestMapping(value="/apkexist.json")
 	@ResponseBody
@@ -123,7 +123,7 @@ public class AppInfoController {
 		HashMap<String, String> APKmap = new HashMap<String,String>();
 		if(APKName == null) {
 			APKmap.put("APKName", "empty");
-		} else if(appservice.getAppInfoByAPK(APKName)){
+		} else if(appInfoService.getAppInfoByAPK(APKName)){
 			APKmap.put("APKName", "exist");
 		} else {
 			APKmap.put("APKName", "noexist");
@@ -174,7 +174,7 @@ public class AppInfoController {
 		info.setCreationDate(new Date());
 		info.setLogoLocPath(logoLocPath);
 		info.setLogoPicPath(logoPicPath);
-		if(appservice.addAppInfo(info)) {
+		if(appInfoService.addAppInfo(info)) {
 			return "redirect:/dev/flatform/app/list";
 		}
 		return "appinfoadd";
@@ -218,7 +218,7 @@ public class AppInfoController {
 		}
 		info.setModifyBy(((DevUser)session.getAttribute("devUserSession")).getId());
 		info.setModifyDate(new Date());
-		if(appservice.modifyAppInfosave(info)) {
+		if(appInfoService.modifyAppInfosave(info)) {
 			return "redirect:/dev/flatform/app/list";
 		}
 		return "redirect:/dev/flatform/app/appinfomodify";
@@ -231,7 +231,7 @@ public class AppInfoController {
 	@RequestMapping(value="/appinfomodify")
 	public String appinfomodify(String id,Model model) {
 		if(IsexectisNull.isBlank(id)) {
-		   model.addAttribute("appInfo", appservice.modifyAppInfo(Integer.parseInt(id)));
+		   model.addAttribute("appInfo", appInfoService.modifyAppInfo(Integer.parseInt(id)));
 		}
 		return "/developer/appinfomodify";
 	}
