@@ -84,6 +84,9 @@ public class AppServiceImpl implements AppService {
 		}
 		return flag;
 	}
+	/**
+	 * 添加APP信息
+	 */
 	@Override
 	public boolean addAppInfo(AppInfo info) {
 		boolean flag = false;
@@ -91,6 +94,24 @@ public class AppServiceImpl implements AppService {
 			flag = true;
 		}
 		return flag;
+	}
+	/**
+	 * 修改APP信息
+	 */
+	@Override
+	public boolean modifyAppInfosave(AppInfo info) {
+		boolean flag = false;
+		if(appMapper.modifyAppInfosave(info) == 1) {
+			flag = true;
+		}
+		return flag;
+	}
+	/**
+	 * id查询修改的app信息
+	 */
+	@Override
+	public AppInfo modifyAppInfo(Integer id) {
+		return appMapper.modifyAppInfo(id);
 	}
 
 }
