@@ -35,9 +35,9 @@ import cn.appsys.tools.IsexectisNull;
  */
 @Controller
 @RequestMapping("/dev/flatform/app")
-public class AppController {
+public class AppInfoController {
 
-	private Logger logger = Logger.getLogger(AppController.class);
+	private Logger logger = Logger.getLogger(AppInfoController.class);
 	@Autowired
 	private AppService appservice;
 	
