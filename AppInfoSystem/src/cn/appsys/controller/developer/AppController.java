@@ -130,7 +130,9 @@ public class AppController {
 		}
 		return APKmap;
 	}
-	
+	/**
+	 * 添加APP信息
+	 */
 	@RequestMapping(value="/appinfoaddsave",method=RequestMethod.POST)
 	public String addAppInfosave(AppInfo info,HttpServletRequest request,HttpSession session,MultipartFile a_logoPicPath) {
 		String logoLocPath = null;
@@ -176,5 +178,61 @@ public class AppController {
 			return "redirect:/dev/flatform/app/list";
 		}
 		return "appinfoadd";
+	}
+     /**
+	 * 修改保存
+	 * @return
+	 */
+	@RequestMapping(value="/appinfomodifysave")
+	public String modifyAppInfosave(AppInfo info,HttpServletRequest request,HttpSession session,MultipartFile attach) {
+		String logoLocPath = null;
+		String logoPicPath = null;
+		if(!attach.isEmpty()) {
+			String path = request.getSession().getServletContext().getRealPath("statics" + File.separator + "uploadfiles");
+			String oldFileName = attach.getOriginalFilename();  //原文件名
+			String prefix = FilenameUtils.getExtension(oldFileName);  //后缀名
+			int filesize = 500000;
+			if(attach.getSize() > filesize) {
+				request.setAttribute("fileUploadError", "*上传文件不得超过500KB");
+			} else if(prefix.equalsIgnoreCase("jpg")
+					 || prefix.equalsIgnoreCase("jpeg")
+					 || prefix.equalsIgnoreCase("png")
+					 || prefix.equalsIgnoreCase("pneg")) {  //文件格式
+				String fileName = System.currentTimeMillis() + RandomUtils.nextInt(10000000) + "_Personal.jpg";  //组装文件名
+				File targetFile = new File(path,fileName);
+				if(!targetFile.exists()) {
+					targetFile.mkdirs();
+				}
+				//保存
+				try {
+					attach.transferTo(targetFile);
+				} catch (Exception e) {
+					e.printStackTrace();
+					request.setAttribute("fileUploadError", "*上传失败");
+				} 
+				logoLocPath = path + File.separator + fileName;  //文件本地路径
+				logoPicPath = logoLocPath.substring(logoLocPath.indexOf("uploadfiles") - 1).replace("\\", "/");
+			}
+			info.setLogoLocPath(logoLocPath);
+			info.setLogoPicPath(logoPicPath);
+		}
+		info.setModifyBy(((DevUser)session.getAttribute("devUserSession")).getId());
+		info.setModifyDate(new Date());
+		if(appservice.modifyAppInfosave(info)) {
+			return "redirect:/dev/flatform/app/list";
+		}
+		return "redirect:/dev/flatform/app/appinfomodify";
+	}
+	/**
+	 * id查询修改的app信息
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/appinfomodify")
+	public String appinfomodify(String id,Model model) {
+		if(IsexectisNull.isBlank(id)) {
+		   model.addAttribute("appInfo", appservice.modifyAppInfo(Integer.parseInt(id)));
+		}
+		return "/developer/appinfomodify";
 	}
 }

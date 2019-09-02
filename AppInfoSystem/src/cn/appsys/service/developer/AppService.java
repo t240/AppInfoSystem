@@ -23,4 +23,8 @@ public interface AppService {
     public boolean getAppInfoByAPK(String APKName);
     //添加app信息
     public boolean addAppInfo(AppInfo info);
+    //id查询要修改的app信息
+    public AppInfo modifyAppInfo(Integer id);
+    //修改app信息
+    public boolean modifyAppInfosave(AppInfo info);
 }
