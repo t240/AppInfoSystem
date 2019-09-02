@@ -113,5 +113,16 @@ public class AppInfoServiceImpl implements AppInfoService {
 	public AppInfo modifyAppInfo(Integer id) {
 		return appInfoMapper.modifyAppInfo(id);
 	}
+	/**
+	 * 更新APP信息的版本id
+	 */
+	@Override
+	public boolean updateAppInfo(Integer versionId, Integer id) {
+		boolean flag = false;
+		if(appInfoMapper.updateAppInfo(versionId, id) == 1) {
+			flag = true;
+		}
+		return flag;
+	}
 
 }

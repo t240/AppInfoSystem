@@ -9,7 +9,7 @@ import cn.appsys.pojo.AppInfo;
 import cn.appsys.pojo.DataDictionary;
 
 /**
- * App接口
+ * App信息接口
  * @author DELL
  *
  */
@@ -37,4 +37,6 @@ public interface AppInfoMapper {
     public AppInfo modifyAppInfo(Integer id);
     //修改app信息
     public int modifyAppInfosave(AppInfo info);
+    //更新app信息的版本id
+    public int updateAppInfo(@Param("versionId")Integer versionId,@Param("id")Integer id);
 }
