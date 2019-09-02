@@ -29,4 +29,8 @@ public interface AppMapper {
     		                        @Param("showPageCount")Integer showPageCount);
     //查询出总记录数
     public int getcount(AppInfo info);
+    //查询APK名称是否唯一
+    public AppInfo getAppInfoByAPK(@Param("APKName")String APKName);
+    //添加app信息
+    public int addAppInfo(AppInfo info);
 }
