@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.appsys.dao.app.AppMapper">
+<mapper namespace="cn.appsys.dao.app.AppInfoMapper">
      <!-- 查询所有App状态 -->
      <select id="getDataList" resultType="DataDictionary">
          SELECT * FROM data_dictionary  WHERE typeCode = #{typeCode}
