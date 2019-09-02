@@ -33,8 +33,4 @@ public interface AppMapper {
     public AppInfo getAppInfoByAPK(@Param("APKName")String APKName);
     //添加app信息
     public int addAppInfo(AppInfo info);
-    //id查询要修改的app信息
-    public AppInfo modifyAppInfo(Integer id);
-    //修改app信息
-    public int modifyAppInfosave(AppInfo info);
 }
