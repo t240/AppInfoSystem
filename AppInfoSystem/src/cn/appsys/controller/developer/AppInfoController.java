@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import cn.appsys.pojo.AppCategory;
 import cn.appsys.pojo.AppInfo;
+import cn.appsys.pojo.AppVersion;
 import cn.appsys.pojo.DataDictionary;
 import cn.appsys.pojo.DevUser;
 import cn.appsys.pojo.pages;
 import cn.appsys.service.developer.AppInfoService;
 import cn.appsys.tools.IsexectisNull;
-
+import cn.appsys.service.developer.AppVersionService;
 /**
  * App信息控制器
  * @author DELL
@@ -40,6 +40,8 @@ public class AppInfoController {
 	private Logger logger = Logger.getLogger(AppInfoController.class);
 	@Autowired
 	private AppInfoService appInfoService;
+	@Autowired
+	private AppVersionService appVersionService;
 	
 	/**
 	 * 打开APP信息管理维护
@@ -81,7 +83,6 @@ public class AppInfoController {
 		}
 		page.setCurrentPageNo(pagecurrNo);
 		model.addAttribute("pages", page);
-		logger.debug(page.getCurrentPageNo()+"=============="+page.getShowPageCount());
 		model.addAttribute("appInfoList", appInfoService.getappinfo(info,page.getCurrentPageNo(),page.getShowPageCount()));
 		return "developer/appinfolist"; 
 	}
@@ -234,5 +235,69 @@ public class AppInfoController {
 		   model.addAttribute("appInfo", appInfoService.modifyAppInfo(Integer.parseInt(id)));
 		}
 		return "/developer/appinfomodify";
+	}
+	/**
+	 * 打开添加APP版本信息页面
+	 * @param id
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/appversionadd")
+	public String openappversionadd(String id,Model model) {
+	    if(IsexectisNull.isBlank(id)) {
+	    	model.addAttribute("appVersionList", appVersionService.getAppVersionListByid(Integer.parseInt(id)));
+	    	model.addAttribute("appId", id);
+	    }
+	    return "/developer/appversionadd";
+	}
+	/**
+	 * 添加APP版本信息
+	 * @param version
+	 * @param request
+	 * @param session
+	 * @param a_downloadLink
+	 * @return
+	 */
+	@RequestMapping(value="/addversionsave")
+	public String addversionsave(AppVersion version,HttpServletRequest request,HttpSession session,MultipartFile a_downloadLink) {
+		String apkLocPath = null;
+		String downloadLink = null;
+		if(!a_downloadLink.isEmpty()) {
+			String path = request.getSession().getServletContext().getRealPath("statics" + File.separator + "uploadfiles");
+			String oldFileName = a_downloadLink.getOriginalFilename(); //获得原文件名
+			String prefix = FilenameUtils.getExtension(oldFileName);  //后缀名
+			int filesize = 5120000;
+			if(a_downloadLink.getSize() > filesize) {
+				request.setAttribute("fileUploadError", "*上传文件不得超过500MB");
+				return "redirect:/dev/flatform/appversionadd";
+			} else if(prefix.equalsIgnoreCase("apk")) {
+				String fileName = System.currentTimeMillis() + oldFileName + ".apk";
+				File targetFile = new File(path,fileName);
+				if(!targetFile.exists()) {
+					targetFile.mkdirs();
+				}
+				try {
+					a_downloadLink.transferTo(targetFile);
+				} catch (Exception e) {
+					e.printStackTrace();
+					request.setAttribute("fileUploadError", "*上传失败");
+				}
+				apkLocPath = path + File.separator + fileName;
+				downloadLink = apkLocPath.substring(apkLocPath.indexOf("AppInfoSystem") - 1);
+			}
+			version.setApkFileName(oldFileName);
+		}
+		version.setCreatedBy(((DevUser)session.getAttribute("devUserSession")).getId());
+		version.setCreationDate(new Date());
+		version.setApkLocPath(apkLocPath);
+		version.setDownloadLink(downloadLink);
+		if(appVersionService.addAppVersion(version)) {
+			Integer versionId = version.getId();
+			Integer id = version.getAppId();
+			if(appInfoService.updateAppInfo(versionId, id)) {
+				return "redirect:/dev/flatform/app/list";
+			}
+		}
+		return "redirect:/dev/flatform/app/appversionadd";
 	}
 }

@@ -87,5 +87,8 @@
               <if test="modifyDate != null">modifyDate=#{modifyDate},</if>
          </trim>
      </update>
-     
+     <!-- 更新APP信息的版本id -->
+     <update id="updateAppInfo">
+         UPDATE app_info SET versionId = #{versionId} WHERE id = #{id}
+     </update>
 </mapper>

@@ -27,4 +27,6 @@ public interface AppInfoService {
     public AppInfo modifyAppInfo(Integer id);
     //修改app信息
     public boolean modifyAppInfosave(AppInfo info);
+    //更新app信息的版本id
+    public boolean updateAppInfo(Integer versionId,Integer id);
 }
