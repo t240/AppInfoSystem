@@ -59,4 +59,32 @@
                 #{devId},#{appInfo},#{status},#{flatformId},#{categoryLevel3},#{downloads},#{createdBy},
                 #{creationDate},#{categoryLevel1},#{categoryLevel2},#{logoPicPath},#{logoLocPath})
      </insert>
+     <!-- id查询要修改的app信息 -->
+     <select id="modifyAppInfo" resultType="AppInfo">
+        SELECT i.*,(SELECT d.valueName FROM  data_dictionary d WHERE i.`status` = d.valueId and d.typeCode = "APP_STATUS") statusName FROM app_info i WHERE id = #{id}
+     </select>
+     <!-- 修改app信息 -->
+     <update id="modifyAppInfosave">
+         UPDATE app_info
+         <trim prefix="SET" suffixOverrides="," suffix="WHERE id = #{id}">
+              <if test="softwareName != null">softwareName=#{softwareName},</if>
+              <if test="APKName != null">APKName=#{APKName},</if>
+              <if test="supportROM != null">supportROM=#{supportROM},</if>
+              <if test="interfaceLanguage != null">interfaceLanguage=#{interfaceLanguage},</if>
+              <if test="softwareSize != null">softwareSize=#{softwareSize},</if>
+              <if test="devId != null">devId=#{devId},</if>
+              <if test="downloads != null">downloads=#{downloads},</if>
+              <if test="appInfo != null">appInfo=#{appInfo},</if>
+              <if test="status != null">status=#{status},</if>
+              <if test="flatformId != null">flatformId=#{flatformId},</if>
+              <if test="categoryLevel3 != null">categoryLevel3=#{categoryLevel3},</if>
+              <if test="categoryLevel1 != null">categoryLevel1=#{categoryLevel1},</if>
+              <if test="categoryLevel2 != null">categoryLevel2=#{categoryLevel2},</if>
+              <if test="logoPicPath != null">logoPicPath=#{logoPicPath},</if>
+              <if test="logoLocPath != null">logoLocPath=#{logoLocPath},</if>
+              <if test="modifyBy != null">modifyBy=#{modifyBy},</if>
+              <if test="modifyDate != null">modifyDate=#{modifyDate},</if>
+         </trim>
+     </update>
+     
 </mapper>

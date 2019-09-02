@@ -95,5 +95,23 @@ public class AppServiceImpl implements AppService {
 		}
 		return flag;
 	}
+	/**
+	 * 修改APP信息
+	 */
+	@Override
+	public boolean modifyAppInfosave(AppInfo info) {
+		boolean flag = false;
+		if(appMapper.modifyAppInfosave(info) == 1) {
+			flag = true;
+		}
+		return flag;
+	}
+	/**
+	 * id查询修改的app信息
+	 */
+	@Override
+	public AppInfo modifyAppInfo(Integer id) {
+		return appMapper.modifyAppInfo(id);
+	}
 
 }
