@@ -17,6 +17,10 @@ public interface AppService {
 	public List<AppCategory> getclassfiy(String categoryLevel);
 	//查询app信息
 	public List<AppInfo> getappinfo(AppInfo info,Integer currentPageNo,Integer showPageCount);
-	 //查询出总记录数
+	//查询出总记录数
     public int getcount(AppInfo info);
+    //查询APK名称是否唯一
+    public boolean getAppInfoByAPK(String APKName);
+    //添加app信息
+    public boolean addAppInfo(AppInfo info);
 }

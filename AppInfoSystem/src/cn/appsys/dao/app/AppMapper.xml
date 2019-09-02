@@ -46,4 +46,18 @@
               <if test="categoryLevel3 != null">AND categoryLevel3 = #{categoryLevel3}</if>
           </trim>
      </select>
+     <!-- 查询APK名称是否唯一  -->
+     <select id="getAppInfoByAPK" resultType="AppInfo">
+         SELECT * FROM app_info WHERE APKName = #{APKName}
+     </select>
+     <!-- 添加app信息 -->
+     <insert id="addAppInfo">
+         INSERT INTO app_info (softwareName,APKName,supportROM,interfaceLanguage,softwareSize,
+                      devId,appInfo,status,flatformId,categoryLevel3,downloads,
+                     createdBy,creationDate,categoryLevel1,categoryLevel2,logoPicPath,logoLocPath)
+         VALUES(#{softwareName},#{APKName},#{supportROM},#{interfaceLanguage},#{softwareSize},
+                #{devId},#{appInfo},#{status},#{flatformId},#{categoryLevel3},#{downloads},#{createdBy},
+                #{creationDate},#{categoryLevel1},#{categoryLevel2},#{logoPicPath},#{logoLocPath})
+         
+     </insert>
 </mapper>

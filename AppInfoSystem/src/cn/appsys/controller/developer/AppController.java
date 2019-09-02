@@ -1,21 +1,29 @@
 package cn.appsys.controller.developer;
 
+import java.io.File;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.alibaba.fastjson.JSON;
+import org.springframework.web.multipart.MultipartFile;
 
 import cn.appsys.pojo.AppCategory;
 import cn.appsys.pojo.AppInfo;
+import cn.appsys.pojo.DataDictionary;
+import cn.appsys.pojo.DevUser;
 import cn.appsys.pojo.pages;
 import cn.appsys.service.developer.AppService;
 import cn.appsys.tools.IsexectisNull;
@@ -26,7 +34,7 @@ import cn.appsys.tools.IsexectisNull;
  *
  */
 @Controller
-@RequestMapping("/dev/app")
+@RequestMapping("/dev/flatform/app")
 public class AppController {
 
 	private Logger logger = Logger.getLogger(AppController.class);
@@ -78,13 +86,95 @@ public class AppController {
 		return "developer/appinfolist"; 
 	}
 	
+	/**
+	 * 查询三级分类
+	 * @param pid
+	 * @return
+	 */
 	@RequestMapping(value="/categorylevellist.json",method=RequestMethod.GET)
 	@ResponseBody
 	public List<AppCategory> categorylist(@RequestParam String pid) {
-		List<AppCategory> catelist = null;
-		if(IsexectisNull.isBlank(pid)) {
-			catelist = appservice.getclassfiy(pid);
+		if("".equals(pid)) {
+			pid = null;
 		}
-		return catelist;
+		return appservice.getclassfiy(pid);
+	}
+	/**
+	 * 打开APP信息添加页面
+	 * @return
+	 */
+	@RequestMapping(value="/appinfoadd")
+	public String appinfoadd() {
+		return "developer/appinfoadd";
+	}
+	/**
+	 * 加载添加页面获取所属平列表
+	 * @param tcode
+	 * @return
+	 */
+	@RequestMapping(value="/datadictionarylist.json",method=RequestMethod.GET)
+	@ResponseBody
+	public List<DataDictionary> loaddatadictionarylist(String tcode){
+		return appservice.getDataList(tcode);
+	}
+	@RequestMapping(value="/apkexist.json")
+	@ResponseBody
+	public Object apkexist(String APKName) {
+		HashMap<String, String> APKmap = new HashMap<String,String>();
+		if(APKName == null) {
+			APKmap.put("APKName", "empty");
+		} else if(appservice.getAppInfoByAPK(APKName)){
+			APKmap.put("APKName", "exist");
+		} else {
+			APKmap.put("APKName", "noexist");
+		}
+		return APKmap;
+	}
+	
+	@RequestMapping(value="/appinfoaddsave",method=RequestMethod.POST)
+	public String addAppInfosave(AppInfo info,HttpServletRequest request,HttpSession session,MultipartFile a_logoPicPath) {
+		String logoLocPath = null;
+		String logoPicPath = null;
+		//判断文件是否为空
+		if(!a_logoPicPath.isEmpty()) {
+			String path = request.getSession().getServletContext().getRealPath("statics" + File.separator + "uploadfiles");
+			String oldFileName = a_logoPicPath.getOriginalFilename();  //原文件名
+			String prefix = FilenameUtils.getExtension(oldFileName); //后缀名
+			int filesize = 500000;  //文件大小
+			if(a_logoPicPath.getSize() > filesize) {
+				request.setAttribute("fileUploadError", "*上传文件不得超过500KB");
+			} else if(prefix.equalsIgnoreCase("jpg")
+					 || prefix.equalsIgnoreCase("png")
+					 || prefix.equalsIgnoreCase("jpeg")
+					 || prefix.equalsIgnoreCase("jpeg")
+					 || prefix.equalsIgnoreCase("pneg")) {  //上传文件格式不正确
+				String fileName = System.currentTimeMillis() + RandomUtils.nextInt(1000000) + "_Personal.jpg";
+				File targetFile = new File(path,fileName);
+				if(!targetFile.exists()) {
+					targetFile.mkdirs();
+				}
+				//保存
+				try {
+					a_logoPicPath.transferTo(targetFile);
+				} catch (Exception e) {
+					e.printStackTrace();
+					request.setAttribute("fileUploadError", "*上传失败");
+					return "appinfoadd";
+				}
+				logoLocPath = path + File.separator + fileName;
+				logoPicPath = logoLocPath.substring(logoLocPath.indexOf("AppInfoSystem")-1).replace("\\", "/");
+			} else {
+				request.setAttribute("fileUploadError", "*上传图片格式不正确");
+				return "appinfoadd";
+			}
+		}
+		info.setCreatedBy(((DevUser)session.getAttribute("devUserSession")).getId());
+		info.setCreationDate(new Date());
+		info.setLogoLocPath(logoLocPath);
+		info.setLogoPicPath(logoPicPath);
+		if(appservice.addAppInfo(info)) {
+			return "redirect:/dev/flatform/app/list";
+		}
+		return "appinfoadd";
 	}
 }

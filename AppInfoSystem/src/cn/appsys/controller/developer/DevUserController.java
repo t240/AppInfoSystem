@@ -46,7 +46,7 @@ public class DevUserController {
 			session.setAttribute("devUserSession", user);
 			session.setMaxInactiveInterval(60);
 			return "developer/main";
-		}
+		} 
 		return  "redirect:/dev/login";
 	}
 

@@ -73,5 +73,24 @@ public class AppServiceImpl implements AppService {
 	public int getcount(AppInfo info) {
 		return appMapper.getcount(info);
 	}
+	/**
+	 * ÅÐ¶ÏAPKÃû³ÆÎ¨Ò»
+	 */
+	@Override
+	public boolean getAppInfoByAPK(String APKName) {
+		boolean flag = false;
+		if(appMapper.getAppInfoByAPK(APKName) != null) {
+			flag = true;
+		}
+		return flag;
+	}
+	@Override
+	public boolean addAppInfo(AppInfo info) {
+		boolean flag = false;
+		if(appMapper.addAppInfo(info) == 1) {
+			flag = true;
+		}
+		return flag;
+	}
 
 }
