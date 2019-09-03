@@ -47,6 +47,9 @@ public class AppVersionServiceImpl implements AppVersionService {
 		}
 		return flag;
 	}
+	/**
+	 * 删除版本信息
+	 */
 	@Override
 	public boolean deleteAppVersion(Integer aid) {
 		boolean flag = false;
@@ -54,6 +57,13 @@ public class AppVersionServiceImpl implements AppVersionService {
 			flag = true;
 		}
 		return flag;
+	}
+	/**
+	 * 查询版本信息
+	 */
+	@Override
+	public AppVersion viewAppVersion(Integer id) {
+		return appVersionMapper.viewAppVersion(id);
 	}
 
 }

@@ -20,4 +20,6 @@ public interface AppVersionMapper {
 	public int modifyVersionsave(AppVersion version);
     //删除历史版本信息
 	public int deleteAppVersion(@Param("aid")Integer aid);
+	//查询版本信息
+	public AppVersion viewAppVersion(@Param("id")Integer id);
 }

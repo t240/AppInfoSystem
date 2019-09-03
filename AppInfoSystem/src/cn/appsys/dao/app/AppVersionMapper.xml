@@ -32,4 +32,8 @@
      <delete id="deleteAppVersion">
           DELETE FROM app_version WHERE appId = #{aid}
      </delete>
+     <!-- 查询版本信息 -->
+     <select id="viewAppVersion" resultType="AppVersion">
+         SELECT * FROM app_version WHERE id = #{id}
+     </select>
 </mapper>

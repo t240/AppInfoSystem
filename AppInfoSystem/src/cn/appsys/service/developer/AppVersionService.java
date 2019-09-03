@@ -17,5 +17,7 @@ public interface AppVersionService {
 	public boolean modifyVersionsave(AppVersion version);
 	//删除历史版本信息
 	public boolean deleteAppVersion(Integer aid);
+	//查询版本信息
+	public AppVersion viewAppVersion(Integer id);
 
 }

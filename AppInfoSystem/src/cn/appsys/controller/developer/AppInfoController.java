@@ -215,7 +215,7 @@ public class AppInfoController {
 					request.setAttribute("fileUploadError", "*上传失败");
 				} 
 				logoLocPath = path + File.separator + fileName;  //文件本地路径
-				logoPicPath = logoLocPath.substring(logoLocPath.indexOf("uploadfiles") - 1).replace("\\", "/");
+				logoPicPath = logoLocPath.substring(logoLocPath.indexOf("AppInfoSystem") - 1).replace("\\", "/");
 			}
 			info.setLogoLocPath(logoLocPath);
 			info.setLogoPicPath(logoPicPath);
@@ -435,6 +435,34 @@ public class AppInfoController {
 		}
 		
 		return updstatuc;
+	}
+	/**
+	 * 删除logo图片
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/delfile.json")
+	@ResponseBody
+	public Object delfile(String id,String flag) {
+		HashMap<String, String> delfilemap = new HashMap<String,String>();
+		if(IsexectisNull.isBlank(id)) {
+			File file = null;
+			if(flag.equals("apk")) {
+				AppVersion version = appVersionService.viewAppVersion(Integer.parseInt(id));
+				file = new File(version.getApkLocPath());
+			} else if(flag.equals("logo")) {
+				AppInfo info = appInfoService.modifyAppInfo(Integer.parseInt(id));
+				file = new File(info.getLogoLocPath());
+			}
+			if(file.exists()) {
+				if(file.delete()) {
+					delfilemap.put("result", "success");
+				} else {
+					delfilemap.put("result", "failed");
+				}
+			}
+		}
+		return delfilemap;
 	}
 	
 }
