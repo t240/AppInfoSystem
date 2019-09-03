@@ -52,15 +52,8 @@ public class AppInfoServiceImpl implements AppInfoService {
 	public List<AppInfo> getappinfo(AppInfo info,Integer currentPageNo,Integer showPageCount) {
 		List<AppInfo> infoList = null;
 		try {
-			//控制当前页
-			Integer pageIndex = 0;
-			if(currentPageNo > 1 && currentPageNo != 0) {
-				pageIndex = (currentPageNo-1)*showPageCount;
-			} else {
-				pageIndex = currentPageNo -1;
-			}
 			infoList = appInfoMapper.getappinfo(info.getSoftwareName(),info.getStatus(),info.getFlatformId(),info.getCategoryLevel1()
-					                        ,info.getCategoryLevel2(),info.getCategoryLevel3(),pageIndex,showPageCount);
+					                        ,info.getCategoryLevel2(),info.getCategoryLevel3(),(currentPageNo-1)*showPageCount,showPageCount);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -121,6 +114,35 @@ public class AppInfoServiceImpl implements AppInfoService {
 	public boolean updateAppInfo(Integer versionId, Integer id) {
 		boolean flag = false;
 		if(appInfoMapper.updateAppInfo(versionId, id) == 1) {
+			flag = true;
+		}
+		return flag;
+	}
+	/**
+	 * 查看APP信息
+	 */
+	@Override
+	public AppInfo viewapp(Integer id) {
+		return appInfoMapper.viewapp(id);
+	}
+	/**
+	 * 删除app信息
+	 */
+	@Override
+	public boolean deleteAppInfo(Integer id) {
+		boolean flag = false;
+		if(appInfoMapper.deleteAppInfo(id) == 1) {
+			flag = true;
+		}
+		return flag;
+	}
+	/**
+	 * 修改APP信息状态
+	 */
+	@Override
+	public boolean updateAppInfoBystatuc(Integer statucid, Integer id) {
+		boolean flag = false;
+		if(appInfoMapper.updateAppInfoBystatuc(statucid, id) == 1) {
 			flag = true;
 		}
 		return flag;

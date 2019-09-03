@@ -39,4 +39,10 @@ public interface AppInfoMapper {
     public int modifyAppInfosave(AppInfo info);
     //更新app信息的版本id
     public int updateAppInfo(@Param("versionId")Integer versionId,@Param("id")Integer id);
+    //查看APP信息
+    public AppInfo viewapp(@Param("id")Integer id);
+    //删除APP信息
+    public int deleteAppInfo(@Param("id")Integer id);
+    //修改上/下架状态
+    public int updateAppInfoBystatuc(@Param("statucid")Integer statucid,@Param("id")Integer id);
 }
