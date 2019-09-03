@@ -66,6 +66,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 		}
 		return infoList;
 	}
+
 	/**
 	 * 查询出app信息总记录数
 	 */
@@ -113,6 +114,7 @@ public class AppInfoServiceImpl implements AppInfoService {
 	public AppInfo modifyAppInfo(Integer id) {
 		return appInfoMapper.modifyAppInfo(id);
 	}
+
 	/**
 	 * 更新APP信息的版本id
 	 */
@@ -124,5 +126,35 @@ public class AppInfoServiceImpl implements AppInfoService {
 		}
 		return flag;
 	}
+	/**
+	 * 查看APP信息
+	 */
+	@Override
+	public AppInfo viewapp(Integer id) {
+		return appInfoMapper.viewapp(id);
+	}
+	/**
+	 * 删除app信息
+	 */
+	@Override
+	public boolean deleteAppInfo(Integer id) {
+		boolean flag = false;
+		if(appInfoMapper.deleteAppInfo(id) == 1) {
+			flag = true;
+		}
+		return flag;
+	}
+	/**
+	 * 修改APP信息状态
+	 */
+	@Override
+	public boolean updateAppInfoBystatuc(Integer statucid, Integer id) {
+		boolean flag = false;
+		if(appInfoMapper.updateAppInfoBystatuc(statucid, id) == 1) {
+			flag = true;
+		}
+		return flag;
+	}
+
 
 }

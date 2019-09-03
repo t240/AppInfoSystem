@@ -90,20 +90,25 @@ $(".modifyAppInfo").on("click",function(){
 $(document).on("click",".saleSwichOpen,.saleSwichClose",function(){
 	var obj = $(this);
 	var appinfoid = obj.attr("appinfoid");
+	var statusid = obj.attr("appstatus");
 	var saleSwitch = obj.attr("saleSwitch");
 	if("open" === saleSwitch){
-		saleSwitchAjax(appinfoid,obj);
+		saleSwitchAjax(appinfoid,statusid,obj);
 	}else if("close" === saleSwitch){
 		if(confirm("你确定要下架您的APP应用【"+obj.attr("appsoftwarename")+"】吗？")){
-			saleSwitchAjax(appinfoid,obj);
+			saleSwitchAjax(appinfoid,statusid,obj);
 		}
 	}
 });
 
-var saleSwitchAjax = function(appId,obj){
+var saleSwitchAjax = function(appId,statusid,obj){
 	$.ajax({
-		type:"PUT",
-		url:appId+"/sale.json",
+		type:"post",
+		url:"sale.json",
+		data:{
+			appId:appId,
+			statusid:statusid
+		},
 		dataType:"json",
 		success:function(data){
 			/*

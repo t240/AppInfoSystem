@@ -29,4 +29,10 @@ public interface AppInfoService {
     public boolean modifyAppInfosave(AppInfo info);
     //更新app信息的版本id
     public boolean updateAppInfo(Integer versionId,Integer id);
+    //查看APP信息
+    public AppInfo viewapp(Integer id);
+    //删除APP信息
+    public boolean deleteAppInfo(Integer id);
+    //修改上/下架状态
+    public boolean updateAppInfoBystatuc(Integer statucid,Integer id);
 }

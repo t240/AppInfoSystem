@@ -91,4 +91,22 @@
      <update id="updateAppInfo">
          UPDATE app_info SET versionId = #{versionId} WHERE id = #{id}
      </update>
+     <!-- 查看APP信息  -->
+     <select id="viewapp" resultType="AppInfo">
+        SELECT i.*,
+        (SELECT valueName FROM data_dictionary d WHERE i.flatformId = d.valueId and d.typeCode = "APP_FLATFORM") flatformName,
+        (SELECT categoryName FROM app_category a WHERE a.id = i.categoryLevel1) categoryLevel1Name,
+        (SELECT categoryName FROM app_category a WHERE a.id = i.categoryLevel2) categoryLevel2Name,
+        (SELECT categoryName FROM app_category a WHERE a.id = i.categoryLevel3) categoryLevel3Name,
+        (SELECT valueName FROM data_dictionary d WHERE i.status = d.valueId and d.typeCode = "APP_STATUS") statusName
+        FROM app_info i WHERE id = #{id}
+     </select>
+     <!-- 删除APP信息  -->
+     <delete id="deleteAppInfo">
+        DELETE FROM app_info WHERE id = #{id}
+     </delete>
+     <!-- 更新上/下架状态 -->
+     <update id="updateAppInfoBystatuc">
+        UPDATE app_info SET `status` = #{statucid} WHERE id = #{id}
+     </update>
 </mapper>
