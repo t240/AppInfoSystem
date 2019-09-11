@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
+encoding//src/cn/appsys/controller/backend/audit/Auditcontroller.java=UTF-8
+encoding//src/cn/appsys/controller/backend/user/BackendUserController.java=UTF-8
 encoding//src/cn/appsys/interceptor/SysInterceptor.java=UTF-8
 encoding//src/cn/appsys/pojo/AdPromotion.java=UTF-8
 encoding//src/cn/appsys/pojo/AppCategory.java=UTF-8

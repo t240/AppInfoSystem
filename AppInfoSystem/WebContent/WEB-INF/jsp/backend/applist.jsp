@@ -14,7 +14,7 @@
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
-				<form method="post" action="list">
+				<form method="post" action="${pageContext.request.contextPath}/audit/applist.html">
 					<input type="hidden" name="pageIndex" value="1" />
 			    <ul>
 					<li>
@@ -161,7 +161,7 @@
 										<td tabindex="0" class="sorting_1">${appInfo.softwareName}</td>
 										<td>${appInfo.APKName }</td>
 										<td>${appInfo.softwareSize }</td>
-										<td>${appInfo.flatformName }</td>
+										<td>${appInfo.flatformName}</td>
 										<td>${appInfo.categoryLevel1Name } -> ${appInfo.categoryLevel2Name } -> ${appInfo.categoryLevel3Name }</td>
 										<td>${appInfo.statusName }</td>
 										<td>${appInfo.downloads }</td>

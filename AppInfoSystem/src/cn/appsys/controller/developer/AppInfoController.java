@@ -85,6 +85,12 @@ public class AppInfoController {
 			pagecurrNo = page.getTotalPageCount();
 		}
 		page.setCurrentPageNo(pagecurrNo);
+		model.addAttribute("querySoftwareName", querySoftwareName);
+		model.addAttribute("queryStatus", queryStatus);
+		model.addAttribute("queryFlatformId", queryFlatformId);
+		model.addAttribute("queryCategoryLevel1", queryCategoryLevel1);
+		model.addAttribute("queryCategoryLevel2", queryCategoryLevel2);
+		model.addAttribute("queryCategoryLevel3", queryCategoryLevel3);
 		model.addAttribute("pages", page);
 		model.addAttribute("appInfoList", appInfoService.getappinfo(info,page.getCurrentPageNo(),page.getShowPageCount()));
 		return "developer/appinfolist"; 
@@ -179,6 +185,7 @@ public class AppInfoController {
 		info.setLogoLocPath(logoLocPath);
 		info.setLogoPicPath(logoPicPath);
 		if(appInfoService.addAppInfo(info)) {
+			
 			return "redirect:/dev/flatform/app/list";
 		}
 		return "appinfoadd";

@@ -1,18 +1,17 @@
-	</div>
-   </div>
-  </div>
- </div>
- <!-- /page content -->
+
+</div>
+</div>
+</div>
+</div>
+<!-- /page content -->
 <!-- footer content -->
-	<footer>
-	  <div class="pull-right">
-	    ©2016 All Rights Reserved. 
-	  </div>
-	  <div class="clearfix"></div>
-	</footer>
+<footer>
+	<div class="pull-right">©2019 All Rights Reserved.</div>
+	<div class="clearfix"></div>
+</footer>
 <!-- /footer content -->
- </div>
-    </div>
-<%@include file="js.jsp" %>
- </body>
+</div>
+</div>
+<%@include file="js.jsp"%>
+</body>
 </html>

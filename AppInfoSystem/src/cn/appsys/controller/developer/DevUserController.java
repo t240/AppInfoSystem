@@ -1,5 +1,9 @@
 package cn.appsys.controller.developer;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -32,7 +36,10 @@ public class DevUserController {
 	public String login() {
 		return "devlogin";
 	}
-	
+	@RequestMapping(value="/403")
+	public String stop() {
+		return "403";
+	}
 	/**
 	 * µÇÂ¼·½·¨
 	 * @param devuser

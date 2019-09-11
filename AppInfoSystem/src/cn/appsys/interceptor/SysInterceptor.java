@@ -10,7 +10,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import cn.appsys.pojo.BackendUser;
 import cn.appsys.pojo.DevUser;
 
-
 public class SysInterceptor extends HandlerInterceptorAdapter {
 	
 	private Logger logger = Logger.getLogger(SysInterceptor.class);
@@ -29,7 +28,7 @@ public class SysInterceptor extends HandlerInterceptorAdapter {
 			if(backendUser!=null) {
 				return true;
 			}
-			response.sendRedirect(request.getContextPath()+"/403.jsp");
+			response.sendRedirect(request.getContextPath()+"/dev/403");
 			return false;
 		}
 		return true;
